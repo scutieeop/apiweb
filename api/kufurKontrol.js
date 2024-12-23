@@ -12,7 +12,7 @@ let gizliKufurListesi = []; // Boş liste ile başlat
 // Küfür listesini dosyadan oku
 async function kufurListesiniYukle() {
     try {
-        const dosyaYolu = path.join(__dirname, './gerekli', 'kufurliste.txt');
+        const dosyaYolu = path.join('./gerekli', 'kufurliste.txt');
         const veri = await fs.readFile(dosyaYolu, 'utf8');
         gizliKufurListesi = veri.split('\n')
             .map(kelime => kelime.trim()) // Boşlukları temizle
@@ -146,8 +146,8 @@ router.use((err, req, res, next) => {
 // Modül dışa aktarma
 module.exports = {
     isim: "Küfür Kontrolü API",
-    aciklama: "Verilen kelimeyi küfür içeriği açısından kontrol eder (/api/kufurKontrol/:kelime)",
+    aciklama: "Verilen kelimeyi küfür içeriği açısından kontrol eder",
     link: "/api/kufurKontrol",
     route: router,
-    aktiflik: 'aktif'
+    aktiflik: 'pasif'
 };
