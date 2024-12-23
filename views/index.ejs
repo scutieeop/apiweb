@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sencinion - Geleceğin API Platformu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .wave-animation {
+            animation: wave 3s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white shadow-md">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-code-branch text-indigo-600 text-2xl mr-3"></i>
+                    <span class="text-2xl font-bold text-gray-800">Sencinion</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index" class="text-gray-600 hover:text-indigo-600">Ana Sayfa</a>
+                    <a href="api" class="text-gray-600 hover:text-indigo-600">API'ler</a>
+                    <a href="" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                        Başla
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg pt-32 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2" data-aos="fade-right">
+                    <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+                        API'lerin Yeni Nesil Platformu
+                    </h1>
+                    <p class="text-xl text-gray-200 mb-8">
+                        Sencinion ile API'lerinizi yönetmek hiç bu kadar kolay olmamıştı.
+                        Geleceğin teknolojisini bugünden keşfedin.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="api" class="bg-white text-indigo-600 px-8 py-3 rounded-lg hover:bg-gray-100">
+                            Hemen Başla
+                        </a>
+                        
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-10 md:mt-0" data-aos="fade-left">
+                    <img src="https://i.hizliresim.com/baw9umr.png" alt="Hero Image" class="wave-animation">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Hikayemiz</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    2023 yılında, bir grup tutkulu yazılım geliştiricisi olarak API dünyasındaki sorunları çözmek için yola çıktık.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card-hover bg-white rounded-xl p-8 shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-indigo-600 text-4xl mb-4">
+                        <i class="fas fa-lightbulb floating"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Fikrin Doğuşu</h3>
+                    <p class="text-gray-600">
+                        Karmaşık API süreçlerini basitleştirmek için çıktığımız yolda, Sencinion'u geliştirdik.
+                    </p>
+                </div>
+
+                <div class="card-hover bg-white rounded-xl p-8 shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-indigo-600 text-4xl mb-4">
+                        <i class="fas fa-rocket floating"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Büyüme</h3>
+                    <p class="text-gray-600">
+                        İlk yılımızda 2+ geliştirici müşteriye ulaştık.
+                    </p>
+                </div>
+
+                <div class="card-hover bg-white rounded-xl p-8 shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-indigo-600 text-4xl mb-4">
+                        <i class="fas fa-chart-line floating"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Gelecek</h3>
+                    <p class="text-gray-600">
+                        Herkesin kullanabileceği yapay zeka / normal işletme apileri ile tekrardan api sektörünü şekillendiriyoruz
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Neden Sencinion?</h2>
+                <p class="text-gray-600">Benzersiz özelliklerimizle API yönetimini yeniden tanımlıyoruz.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card-hover bg-white p-6 rounded-xl shadow-lg" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-bolt text-indigo-600 text-3xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Hızlı Entegrasyon</h3>
+                    <p class="text-gray-600">Dakikalar içinde API'lerinizi entegre edin.</p>
+                </div>
+
+                <div class="card-hover bg-white p-6 rounded-xl shadow-lg" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-shield-alt text-indigo-600 text-3xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Güvenli</h3>
+                    <p class="text-gray-600">En yüksek güvenlik standartlarıyla korunun.</p>
+                </div>
+
+                <div class="card-hover bg-white p-6 rounded-xl shadow-lg" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fas fa-chart-bar text-indigo-600 text-3xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Analitik</h3>
+                    <p class="text-gray-600">Detaylı raporlar ve gerçek zamanlı analitikler.</p>
+                </div>
+
+                <div class="card-hover bg-white p-6 rounded-xl shadow-lg" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-users text-indigo-600 text-3xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Topluluk</h3>
+                    <p class="text-gray-600">Aktif geliştirici topluluğuyla büyüyün.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-white mb-8" data-aos="fade-up">
+                Geleceğin API Platformuna Katılın
+            </h2>
+            <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                Binlerce geliştirici ve yüzlerce şirket Sencinion'u tercih ediyor. Siz de aramıza katılın!
+            </p>
+            <a href="bekleme" class="bg-white text-indigo-600 px-8 py-3 rounded-lg hover:bg-gray-100 inline-block" data-aos="fade-up" data-aos-delay="200">
+                Ücretsiz Başlayın
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-white text-lg font-bold mb-4">Sencinion</h4>
+                    <p class="text-sm">
+                        Geleceğin API platformu olarak, geliştiricilere ve işletmelere güç veriyoruz.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white text-lg font-bold mb-4">Ürünler</h4>
+                    <ul class="space-y-2">
+                        <li><a href="api" class="hover:text-white">API Yönetimi</a></li>
+                        <li><a href="bekleme" class="hover:text-white">Dökümantasyon</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white text-lg font-bold mb-4">Şirket</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://discord.gg/TbjgFxSFP6" class="hover:text-white">İletişim</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white text-lg font-bold mb-4">Bağlantılar</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/ylc_berkay" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="https://discord.gg/TbjgFxSFP6" class="hover:text-white"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-sm text-center">
+                <p>&copy; 2024 Sencinion. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sencinion - API Listesi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .search-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .api-card {
+            transition: transform 0.2s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .api-card:hover {
+            transform: translateY(-5px);
+        }
+        .status-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            transform: translate(40px, -40px) rotate(45deg);
+        }
+        .status-text {
+            position: absolute;
+            top: 50px;
+            right: 2px;
+            transform: rotate(-45deg);
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="search-container text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold flex items-center">
+                    <i class="fas fa-code-branch mr-3"></i>
+                    Sencinion
+                </h1>
+                <nav class="hidden md:flex space-x-4">
+                    <a href="/" class="hover:text-gray-300">Ana Sayfa</a>
+                    <a href="https://discord.gg/TbjgFxSFP6" class="hover:text-gray-300">İletişim</a>
+                </nav>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="relative max-w-xl mx-auto">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="API ara..." 
+                    class="w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                >
+                <i class="fas fa-search absolute right-4 top-3.5 text-gray-500"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="apiContainer">
+            <% apiList.forEach(api => { %>
+                <div class="api-card bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="status-indicator <%= api.aktiflik === 'aktif' ? 'bg-green-500' : 'bg-red-500' %>"></div>
+                    <span class="status-text"><%= api.aktiflik === 'aktif' ? 'Aktif' : 'Pasif' %></span>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-plug text-indigo-600 text-2xl mr-3"></i>
+                                <h2 class="text-xl font-semibold text-gray-800"><%= api.isim %></h2>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4"><%= api.aciklama %></p>
+                        <% if (api.aktiflik === 'aktif') { %>
+                            <a href="<%= api.link %>" class="inline-flex items-center text-indigo-600 hover:text-indigo-800">
+                                <span>API'ye Git</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        <% } else { %>
+                            <span class="inline-flex items-center text-gray-400">
+                                <span>Erişim Kapalı</span>
+                                <i class="fas fa-lock ml-2"></i>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const apiContainer = document.getElementById('apiContainer');
+        const apiCards = apiContainer.getElementsByClassName('api-card');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+
+            Array.from(apiCards).forEach(card => {
+                const title = card.querySelector('h2').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
