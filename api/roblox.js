@@ -38,21 +38,14 @@ router.get('/api/level-card', async (req, res) => {
         // Cache kontrolü
         const cachedImage = cache.get(cacheKey);
         if (cachedImage && Date.now() - cachedImage.timestamp < CACHE_DURATION) {
-            return res.sendFile(cachedImage.filePath, { root: '.' }, (err) => {
-                if (err) {
-                    console.error('Cache dosyası gönderme hatası:', err);
-                    res.status(500).json({
-                        error: 'Dosya gönderilirken bir hata oluştu',
-                        status: 500
-                    });
-                }
-            });
+            res.writeHead(200, { 'Content-Type': 'image/png' });
+            return res.end(cachedImage.buffer); // Bellekte tutulan görüntüyü döndür
         }
 
         const levelCard = new LevelCard();
-        
+
         // Kart oluşturma
-        await levelCard.generateCard({
+        const buffer = await levelCard.generateCard({
             username,
             avatarURL,
             level: parseInt(level),
@@ -61,28 +54,15 @@ router.get('/api/level-card', async (req, res) => {
             season
         });
 
-        // Benzersiz dosya adı oluştur
-        const fileName = `cache/level-card-${username}-${Date.now()}.png`;
-
-        // Kartı kaydet
-        await levelCard.saveCard(fileName);
-
         // Cache'e kaydet
         cache.set(cacheKey, {
             timestamp: Date.now(),
-            filePath: fileName
+            buffer // Görüntü bellekte saklanır
         });
 
-        // Response gönder
-        res.sendFile(fileName, { root: '.' }, (err) => {
-            if (err) {
-                console.error('Dosya gönderme hatası:', err);
-                res.status(500).json({
-                    error: 'Dosya gönderilirken bir hata oluştu',
-                    status: 500
-                });
-            }
-        });
+        // Yanıt olarak görüntüyü gönder
+        res.writeHead(200, { 'Content-Type': 'image/png' });
+        res.end(buffer);
 
     } catch (error) {
         console.error('Hata:', error);
