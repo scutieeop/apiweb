@@ -128,5 +128,12 @@ module.exports = {
     aciklama: "Sözcü gazetesinden güncel haberleri getirir. Limit parametresi ile haber sayısı sınırlanabilir (?limit=10)",
     link: "/api/sozcu-news",
     route: router,
-    aktiflik: 'aktif'
+    aktiflik: 'aktif',
+    parametreler: [
+        {
+            isim: "limit",
+            zorunlu: false,
+            aciklama: "Getirilecek haber sayısını belirler. Varsayılan değer: 20"
+        }
+    ]
 };

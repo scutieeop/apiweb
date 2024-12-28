@@ -89,8 +89,16 @@ router.get('/api/sencinionai/:mesaj', async (req, res) => {
 // Modül dışa aktarma
 module.exports = {
     isim: "Sencinion AI API",
-    aciklama: "Vc-Laude ile mesajları işleyen API (?mesaj=Merhaba)",
+    aciklama: "VC-Laude ile mesajları işleyen API (?mesaj=Merhaba)",
     link: "/api/sencinionai/merhaba kendinden bahset",
     route: router,
-    aktiflik: 'aktif'
+    aktiflik: 'aktif',
+    parametreler: [
+        {
+            isim: "mesaj",
+            zorunlu: true,
+            aciklama: "AI ile iletişim için gönderilecek mesaj. Örnek: 'Merhaba kendinden bahset'"
+        }
+    ]
+    
 };

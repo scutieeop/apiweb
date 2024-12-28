@@ -130,11 +130,17 @@ router.get('/api/sondakika-news/health', (req, res) => {
     });
 });
 
-// Modül dışa aktarma
 module.exports = {
     isim: "Son Dakika Haber API",
     aciklama: "SonDakika.com sitesinden güncel haberleri getirir. Limit parametresi ile haber sayısı sınırlanabilir (?limit=10)",
     link: "/api/sondakika-news",
     route: router,
-    aktiflik: 'aktif'
+    aktiflik: 'aktif',
+    parametreler: [
+        {
+            isim: "limit",
+            zorunlu: false,
+            aciklama: "Getirilecek haber sayısını belirler. Varsayılan değer: 20, maksimum değer: 20"
+        }
+    ]
 };

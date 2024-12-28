@@ -98,7 +98,15 @@ module.exports = {
     aciklama: "Türkiye'nin büyük şehirlerinden rastgele bir şehir döndürür. Bölge parametresi ile filtrelenebilir (?bolge=Marmara gibi)",
     link: "/api/random-city",
     route: router,
-    aktiflik: 'aktif' // veya 'pasif' olarak ayarlanabilir
+    aktiflik: 'aktif', // veya 'pasif' olarak ayarlanabilir
+    parametreler: [
+        {
+            isim: "bolge",
+            zorunlu: false,
+            aciklama: "Filtrelenecek bölge adı. Örnek: Marmara, Ege, Akdeniz"
+        }
+    ]
+    
 };
 
 
