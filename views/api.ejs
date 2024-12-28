@@ -7,17 +7,43 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .search-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Ccircle cx='5' cy='5' r='1' fill='white'/%3E%3C/svg%3E");
+            animation: snow 10s linear infinite;
+            z-index: 1000;
         }
+
+        @keyframes snow {
+            0% { background-position: 0 0; opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { background-position: 500px 1000px; opacity: 0; }
+        }
+
+        .search-container {
+            background: linear-gradient(135deg, #2c5282 0%, #2b6cb0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
         .api-card {
             transition: transform 0.2s ease-in-out;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.95);
         }
+
         .api-card:hover {
             transform: translateY(-5px);
         }
+
         .status-indicator {
             position: absolute;
             top: 0;
@@ -26,6 +52,7 @@
             height: 80px;
             transform: translate(40px, -40px) rotate(45deg);
         }
+
         .status-text {
             position: absolute;
             top: 50px;
@@ -33,11 +60,65 @@
             transform: rotate(-45deg);
             font-size: 12px;
             font-weight: bold;
-            color: black;
+            color: white;
+        }
+
+        .parameter-box {
+            background-color: rgba(99, 102, 241, 0.05);
+            border-left: 4px solid #6366f1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
 <body class="bg-gray-100">
+    <div class="snow"></div>
+    
+    <!-- Modal -->
+    <div id="apiModal" class="modal">
+        <div class="modal-content">
+            <span class="close absolute top-4 right-4 text-2xl cursor-pointer">&times;</span>
+            <h2 class="text-2xl font-bold mb-4">API Detayları</h2>
+            <div class="mb-4">
+                <h3 class="font-semibold">Endpoint:</h3>
+                <code class="bg-gray-100 p-2 rounded block mt-2" id="modalEndpoint"></code>
+            </div>
+            <div class="mb-4">
+                <h3 class="font-semibold">Parametreler:</h3>
+                <div id="modalParameters" class="mt-2"></div>
+            </div>
+            <a id="modalLink" href="#" target="_blank" 
+               class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+                API'ye Git
+            </a>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="search-container text-white py-8 px-4">
         <div class="container mx-auto">
@@ -69,7 +150,9 @@
     <main class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="apiContainer">
             <% apiList.forEach(api => { %>
-                <div class="api-card bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="api-card rounded-lg shadow-md overflow-hidden" 
+                     data-endpoint="https://apiweb-lnie.onrender.com<%= api.link %>"
+                     data-parameters='<%= JSON.stringify(api.parametreler || []) %>'>
                     <div class="status-indicator <%= api.aktiflik === 'aktif' ? 'bg-green-500' : 'bg-red-500' %>"></div>
                     <span class="status-text"><%= api.aktiflik === 'aktif' ? 'Aktif' : 'Pasif' %></span>
                     <div class="p-6">
@@ -79,29 +162,37 @@
                                 <h2 class="text-xl font-semibold text-gray-800"><%= api.isim %></h2>
                             </div>
                         </div>
+
                         <p class="text-gray-600 mb-4"><%= api.aciklama %></p>
-                        <% if (api.aktiflik === 'aktif') { %>
-                            <a href="<%= api.link %>" class="inline-flex items-center text-indigo-600 hover:text-indigo-800">
-                                <span>API'ye Git</span>
-                                <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
-                        <% } else { %>
-                            <span class="inline-flex items-center text-gray-400">
-                                <span>Erişim Kapalı</span>
-                                <i class="fas fa-lock ml-2"></i>
-                            </span>
-                        <% } %>
+
+                        <div class="mt-4">
+                            <% if (api.aktiflik === 'aktif') { %>
+                                <button onclick="showApiModal(this.parentElement.parentElement.parentElement)" 
+                                        class="inline-flex items-center text-indigo-600 hover:text-indigo-800 cursor-pointer">
+                                    <span>API'ye Git</span>
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                            <% } else { %>
+                                <span class="inline-flex items-center text-gray-400 cursor-not-allowed">
+                                    <span>Erişim Kapalı</span>
+                                    <i class="fas fa-lock ml-2"></i>
+                                </span>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
             <% }); %>
         </div>
     </main>
 
+    <!-- Scripts -->
     <script>
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const apiContainer = document.getElementById('apiContainer');
         const apiCards = apiContainer.getElementsByClassName('api-card');
+        const modal = document.getElementById('apiModal');
+        const modalClose = document.querySelector('.close');
 
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
@@ -116,6 +207,54 @@
                     card.style.display = 'none';
                 }
             });
+        });
+
+        // Modal functionality
+        function showApiModal(card) {
+            const endpoint = card.dataset.endpoint;
+            const parameters = JSON.parse(card.dataset.parameters);
+            
+            document.getElementById('modalEndpoint').textContent = endpoint;
+            document.getElementById('modalLink').href = endpoint;
+            
+            const parameterContainer = document.getElementById('modalParameters');
+            parameterContainer.innerHTML = parameters.map(param => `
+                <div class="parameter-box p-3 rounded-lg mb-2">
+                    <div class="flex items-center">
+                        <span class="font-medium text-indigo-600">${param.isim}</span>
+                        ${param.zorunlu ? '<span class="text-red-500 ml-1" title="Zorunlu">*</span>' : ''}
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">${param.aciklama}</p>
+                </div>
+            `).join('');
+            
+            modal.style.display = 'block';
+        }
+
+        modalClose.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Snow effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const snowContainer = document.querySelector('.snow');
+            const numberOfSnowflakes = 50;
+            
+            for (let i = 0; i < numberOfSnowflakes; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+                snowflake.style.opacity = Math.random();
+                snowflake.style.transform = `scale(${Math.random()})`;
+                snowContainer.appendChild(snowflake);
+            }
         });
     </script>
 </body>
