@@ -38,14 +38,14 @@ router.get('/api/level-card', async (req, res) => {
         // Cache kontrolü
         const cachedImage = cache.get(cacheKey);
         if (cachedImage && Date.now() - cachedImage.timestamp < CACHE_DURATION) {
-            res.writeHead(200, { 'Content-Type': 'image/png' });
-            return res.end(cachedImage.buffer); // Bellekte tutulan görüntüyü döndür
+            res.set('Content-Type', 'image/png');
+            return res.send(cachedImage.buffer);
         }
 
         const levelCard = new LevelCard();
-
+        
         // Kart oluşturma
-        const buffer = await levelCard.generateCard({
+        await levelCard.generateCard({
             username,
             avatarURL,
             level: parseInt(level),
@@ -54,15 +54,18 @@ router.get('/api/level-card', async (req, res) => {
             season
         });
 
-        // Cache'e kaydet
+        // Canvas'ı buffer'a çevir
+        const buffer = levelCard.canvas.toBuffer('image/png');
+
+        // Cache'e buffer'ı kaydet
         cache.set(cacheKey, {
             timestamp: Date.now(),
-            buffer // Görüntü bellekte saklanır
+            buffer: buffer
         });
 
-        // Yanıt olarak görüntüyü gönder
-        res.writeHead(200, { 'Content-Type': 'image/png' });
-        res.end(buffer);
+        // Response gönder
+        res.set('Content-Type', 'image/png');
+        res.send(buffer);
 
     } catch (error) {
         console.error('Hata:', error);
