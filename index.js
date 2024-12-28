@@ -1,11 +1,16 @@
-const fs = require('fs').promises;
-const path = require('path');
+// index.js
 const express = require('express');
+const path = require('path');
+const fs = require('fs').promises;
 const app = express();
+const LevelCard = require('./moduller/test');
 
 // EJS template engine ayarları
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Statik dosyalar için middleware
+app.use(express.static('public'));
 
 // API route'larını otomatik yükleyen fonksiyon
 async function loadApiRoutes(app) {
@@ -15,23 +20,20 @@ async function loadApiRoutes(app) {
 
     for (const file of files) {
         if (file.endsWith('.js')) {
-            // Her API dosyasını require et
             const apiPath = path.join(apiDir, file);
             const apiModule = require(apiPath);
             
-            // API bilgilerini kontrol et
             if (apiModule.isim && apiModule.aciklama && apiModule.link && apiModule.route && apiModule.aktiflik) {
-                // Sadece aktif API'ler için route'u kaydet
                 if (apiModule.aktiflik === 'aktif') {
                     app.use(apiModule.route);
                 }
                 
-                // Tüm API'leri (aktif veya pasif) listeye ekle
                 apiList.push({
                     isim: apiModule.isim,
                     aciklama: apiModule.aciklama,
                     link: apiModule.link,
-                    aktiflik: apiModule.aktiflik
+                    aktiflik: apiModule.aktiflik,
+                    parametreler: apiModule.parametreler || []
                 });
             }
         }
@@ -40,7 +42,17 @@ async function loadApiRoutes(app) {
     return apiList;
 }
 
-// Ana route
+// Ana route'lar
+app.get('/', async (req, res) => {
+    try {
+        const apiList = await loadApiRoutes(app);
+        res.render('index', { apiList });
+    } catch (error) {
+        console.error('Hata:', error);
+        res.status(500).send('Bir hata oluştu');
+    }
+});
+
 app.get('/api', async (req, res) => {
     try {
         const apiList = await loadApiRoutes(app);
@@ -53,16 +65,6 @@ app.get('/api', async (req, res) => {
 
 app.get('/bekleme', async (req, res) => {
     res.render('bekleme');
-});
-
-app.get('/', async (req, res) => {
-    try {
-        const apiList = await loadApiRoutes(app);
-        res.render('index', { apiList });
-    } catch (error) {
-        console.error('Hata:', error);
-        res.status(500).send('Bir hata oluştu');
-    }
 });
 
 // Sunucuyu başlat
